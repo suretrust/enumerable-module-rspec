@@ -306,7 +306,6 @@ end
 # puts [nil].my_none?                                        #=> true
 # puts [nil, false].my_none?                                 #=> true
 # puts [nil, false, true].my_none?                           #=> false
-# 
+#
 # ary = [1, 2, 4, 2]
 # ary.my_each { |x| puts x }
-
