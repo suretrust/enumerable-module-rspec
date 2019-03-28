@@ -182,7 +182,7 @@ def my_any_arg_class(result, arg)
     end
   elsif is_a? Hash
     my_each do |k, v|
-      result = true if v[k].is_a? arg
+      result = true if (v.is_a? arg) && (k.is_a? arg)
     end
   end
   result
@@ -232,7 +232,8 @@ end
 
 def my_none_else_class(result, arg)
   my_each do |k, v|
-    if ((is_a? Array) && (k.is_a? arg)) || ((is_a? Hash) && (v[k].is_a? arg))
+    if ((is_a? Array) && (k.is_a? arg)) ||
+       ((is_a? Hash) && (v.is_a? arg) && (k.is_a? arg))
       result = false
       break
     end
