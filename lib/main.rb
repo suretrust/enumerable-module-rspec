@@ -137,7 +137,7 @@ def my_all_arg_class(result, arg)
     end
   elsif is_a? Hash
     my_each do |k, v|
-      result = false unless v[k].is_a? arg
+      result = false unless (v.is_a? arg) && (k.is_a? arg)
     end
   end
   result

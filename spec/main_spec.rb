@@ -86,3 +86,35 @@ RSpec.describe Enumerable do
     end
   end
 end
+
+RSpec.describe Enumerable do
+  describe '#my_all?' do
+    it 'returns true if all words have a length of 3 or more' do
+      expect(%w[ant bear cat].my_all? { |word| word.length >= 3 }).to eql(true)
+    end
+    it 'returns false if not all have a length of 4 or more' do
+      expect(%w[ant bear cat].my_all? { |word| word.length >= 4 }).to eql(false)
+    end
+    it 'returns true if all items are Numeric' do
+      expect([1, 2i, 3.14].all?(Numeric)).to eql(true)
+    end
+    it 'returns false if not all match the expression /t/' do
+      expect(%w[ant bear cat].my_all?(/t/)).to eql(false)
+    end
+    it 'returns false if not all are true' do
+      expect([nil, true, 99].all?).to eql(false)
+    end
+    it 'returns true if the array is empty' do
+      expect([].all?).to eql(true)
+    end
+
+    hash_test = { a: 1, b: 2, c: 3, d: 4, e: 5, f: 6 }
+
+    it 'returns true if all the values of the hash are positive' do
+      expect(hash_test.my_all? { |_k, v| v >= 0 }).to eql(true)
+    end
+    it 'returns false if not all the keys and values of the hash are Numeric' do
+      expect(hash_test.my_all?(Numeric)).to eql(false)
+    end
+  end
+end
