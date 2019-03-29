@@ -111,7 +111,7 @@ RSpec.describe Enumerable do
       expect(hash_test.my_all? { |_k, v| v >= 0 }).to eql(true)
     end
     it 'returns false if not all keys are strings' do
-      expect(hash_test.my_all? {|key, value| key.is_a? String}).to eql(false)
+      expect(hash_test.my_all? { |key, _value| key.is_a? String }).to eql(false)
     end
   end
 end
@@ -121,12 +121,40 @@ RSpec.describe Enumerable do
     it "returns true if any of the word's length is 3 or more" do
       expect(%w[ant bear cat].my_any? { |word| word.length >= 3 }).to eql(true)
     end
-    it "returns true if any of the items is true" do
+    it 'returns true if any of the items is true' do
       expect([nil, true, 99].my_any?).to eql(true)
     end
-    h = {"a" => 1, "b" => 2, "c" => 3}
-    it "returns false since none of the values is a string" do
-      expect(h.my_any? {|key, value| value.is_a? String}).to eql(false)
+    it 'returns true if any of the items are Numeric' do
+      expect([1, 2i, 3.14].my_any?(Numeric)).to eql(true)
+    end
+    h = { 'a' => 1, 'b' => 2, 'c' => 3 }
+    it 'returns true if any of the values is 3 or greater' do
+      expect(h.my_any? { |_k, v| v >= 3 }).to eql(true)
+    end
+    it 'returns false since none of the values is a string' do
+      expect(h.my_any? { |_key, value| value.is_a? String }).to eql(false)
+    end
+  end
+end
+
+RSpec.describe Enumerable do
+  describe '#my_map?' do
+    it 'returns each item squared' do
+      expect((1..4).my_map { |i| i * i }).to eql([1, 4, 9, 16])
+    end
+    it "returns the word 'cat' repeated for each item in the range" do
+      expect((1..4).my_map { 'cat' }).to eql(%w[cat cat cat cat])
+    end
+    it 'returns the letters transformed to uppercase' do
+      expect(%w[a b c].my_map(&:upcase)).to eql(%w[A B C])
+    end
+    it 'returns the hash pairs with each value converted to symbol' do
+      expect({ a: 'foo', b: 'bar' }
+        .my_map { |k, v| [k, v.to_sym] }).to eql([%i[a foo], %i[b bar]])
+    end
+    it 'returns an enumerator of the hash when no block is passed ' do
+      expect({ a: 'foo', b: 'bar' }
+        .my_map) == { a: 'foo', b: 'bar' }.to_enum(:my_map)
     end
   end
 end
