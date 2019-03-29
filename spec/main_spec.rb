@@ -99,10 +99,10 @@ RSpec.describe Enumerable do
       expect(%w[ant bear cat].my_all?(/t/)).to eql(false)
     end
     it 'returns false if not all are true' do
-      expect([nil, true, 99].all?).to eql(false)
+      expect([nil, true, 99].my_all?).to eql(false)
     end
     it 'returns true if the array is empty' do
-      expect([].all?).to eql(true)
+      expect([].my_all?).to eql(true)
     end
 
     hash_test = { a: 1, b: 2, c: 3, d: 4, e: 5, f: 6 }
@@ -110,8 +110,23 @@ RSpec.describe Enumerable do
     it 'returns true if all the values of the hash are positive' do
       expect(hash_test.my_all? { |_k, v| v >= 0 }).to eql(true)
     end
-    it 'returns false if not all the collection members are Numeric' do
-      expect(hash_test.my_all?(Numeric)).to eql(true)
+    it 'returns false if not all keys are strings' do
+      expect(hash_test.my_all? {|key, value| key.is_a? String}).to eql(false)
+    end
+  end
+end
+
+RSpec.describe Enumerable do
+  describe '#my_any?' do
+    it "returns true if any of the word's length is 3 or more" do
+      expect(%w[ant bear cat].my_any? { |word| word.length >= 3 }).to eql(true)
+    end
+    it "returns true if any of the items is true" do
+      expect([nil, true, 99].my_any?).to eql(true)
+    end
+    h = {"a" => 1, "b" => 2, "c" => 3}
+    it "returns false since none of the values is a string" do
+      expect(h.my_any? {|key, value| value.is_a? String}).to eql(false)
     end
   end
 end
